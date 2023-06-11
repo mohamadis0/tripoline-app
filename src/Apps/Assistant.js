@@ -1,9 +1,5 @@
 import { View, Text, StyleSheet, Image, } from 'react-native';
 import React from 'react';
-import { useState } from 'react';
-import { useNavigation } from '@react-navigation/native'
-import DropDownPicker from 'react-native-dropdown-picker';
-import { Picker as SelectPicker } from '@react-native-picker/picker';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import Service from '../AssistantPages/Service';
@@ -15,7 +11,7 @@ const Tab = createBottomTabNavigator();
 function TabNavigator() {
 
   return (
-    <Tab.Navigator>
+    <Tab.Navigator screenOptions={{tabBarIcon: () => null, tabBarLabelStyle: styles.tabBarLabel}}>
       <Tab.Screen name="Service"  component={Service} options={{ headerShown: false}} />
       <Tab.Screen name="Updates" component={Updates} options={{ headerShown: false }} />
       <Tab.Screen name="Settings" component={Settings} options={{ headerShown: false }} />
@@ -43,6 +39,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  tabBarLabel: {
+    textAlign: 'center',
+    fontSize: 15,
+    fontWeight: 'bold',
+    paddingBottom:13,
   },
 });
 

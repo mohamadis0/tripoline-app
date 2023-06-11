@@ -8,10 +8,9 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Assistant from './src/Apps/Assistant';
 import User from './src/Apps/User';
 import Details from './src/FirstPage/Details';
-// import Assistant from './src/Apps/Service';
+import Table from './src/UserPages/Table';
 
 
-// const Tab = createBottomTabNavigator();
 const Stack =createStackNavigator();
 const NavStyle ={headerTitleAlign: "center",
 headerStyle: {
@@ -25,23 +24,9 @@ headerTitle: () => (
   />
 ),};
 
-
-
-
- 
-// function TabNavigator(){
-//   return(
-//     <Tab.Navigator>
-//       <Tab.Screen name="assis" component={Assistant} options={NavStyle}/>
-//       <Tab.Screen name="User" component={User} options={NavStyle}/>
-//     </Tab.Navigator>
-//   )
-// }
-
 function StackNavigator(){
   return(
     <Stack.Navigator>
-      {/* <Stack.Screen name="home" component={TabNavigator} options={{ headerShown: false }}/> */}
       <Stack.Screen name="details" component={Details} options={NavStyle}/>
       <Stack.Screen name="assis" component={Assistant} options={NavStyle}/>
       <Stack.Screen name="User" component={User} options={NavStyle}/>
