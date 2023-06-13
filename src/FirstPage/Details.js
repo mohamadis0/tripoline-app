@@ -1,40 +1,57 @@
-import { View, Text, StyleSheet, TextInput, Button, ImageBackground, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, TextInput, Button, ImageBackground, TouchableOpacity, Alert } from 'react-native'
 import React from 'react'
 import { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
+import axios from 'axios'
 
 const image = ('../../assets/bg-image.jpeg');
 
 
 const Details = () => {
 
-
   
+  const navigation = useNavigation()
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = () => {
-    if (username === 'assistant' && password === 'password') {
-      navigation.navigate('assis');
-    } else {
-      if (username === 'user' && password === 'password') {
+  const handleLogin = async () => {
+  
+  try {
+    
+    const response = await axios.post('https://tripoline-backend-m1it.vercel.app/api/users/login', {
+      "email": username,
+    "password": password
+  });
+  const profileId = response.data.data.user.profileId;
+  const response1 = await axios.get(`https://tripoline-backend-m1it.vercel.app/api/profiles/${profileId}`);
+    const profileName =response1.data.profileName
+   
+    
+      if (profileName=== 'admin') {
+       
+        navigation.navigate('assis');
+      } else if (profileName === 'user') {
+        
         navigation.navigate('User');
-      } else {
-        alert('Invalid credentials');
-      }
+      } 
+     else {
+      Alert.alert('Login failed', 'Invalid username/password');
     }
+  } catch (error) {
+   Alert.alert('Error', 'An error occurred while logging in');
+  
+};
   }
 
-
-  const navigation = useNavigation()
+  
   return (
     <View style={styles.container}>
-      <ImageBackground source={require(image)} style={styles.image}>
+      {/* <ImageBackground source={require(image)} style={styles.image}> */}
         <View style={styles.title}>
           <Text style={styles.text1}>Enter username and {'\n'}         password </Text>
         </View>
         <TextInput style={styles.textinput}
-          placeholder="    Username"
+          placeholder="    Email"
           value={username}
           onChangeText={text => setUsername(text)}
         />
@@ -48,7 +65,7 @@ const Details = () => {
           <Text style={styles.text} >Login</Text>
 
         </TouchableOpacity>
-      </ImageBackground>
+      {/* </ImageBackground> */}
     </View>
   )
 
