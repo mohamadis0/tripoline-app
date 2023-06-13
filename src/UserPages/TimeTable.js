@@ -1,19 +1,19 @@
-import { View, Text, TouchableOpacity, Image, StyleSheet, FlatList } from 'react-native'
+import React, { useEffect, useState } from 'react';
+import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Table from './Table';
-import { useNavigation } from '@react-navigation/native'
-import React, { useState, useEffect } from 'react';
 
 
+const TimeTable = (props) => {
 
+  const [isLineDetails, setIsLineDetails] = useState(false)
 
-const TimeTable = () => {
-  const navigation = useNavigation();
-  const handlePress = () => {
-    navigation.navigate('Table');
+  const handlePress = (item) => {
+    console.log(item)
+    setIsLineDetails(true)
   }
 
   const [data, setData] = useState([]);
-
+  
   useEffect(() => {
     fetchData();
   }, []);
@@ -27,14 +27,25 @@ const TimeTable = () => {
       console.error('Error fetching data:', error);
     }
   };
-
+  const getColorByStatus = (status)=>{
+    switch (status) {
+      case 'ongoing':
+          return 'green'
+      case '':
+          return 'yellow'
+      case '':
+          return 'black'
+      default:
+        return 'green';
+    }
+  }
   const renderItem = ({ item }) => {
-    const colors = ['green', 'yellow', 'black'];
     return (
+      <TouchableOpacity onPress={() => handlePress(item)}>
       <View style={styles.viewLine}>
         <Text style={{margin:10}}>{item.name}</Text>
         <View style={{
-            backgroundColor: colors[0],
+            backgroundColor: getColorByStatus(item.status),
             borderRadius: 50,
             width: 20,
             height: 20,
@@ -43,21 +54,20 @@ const TimeTable = () => {
 
         </View>
       </View>
+      </TouchableOpacity>
+
     );
   };
 
   return (
     <View>
-      <TouchableOpacity onPress={handlePress}>
-        <Text>TimeTable</Text>
-        </TouchableOpacity>
-        <FlatList
-        data={data}
-        renderItem={renderItem}
-        keyExtractor={item => item.id.toString()}
-      />
-
-
+      {
+        isLineDetails ? <Table /> : <FlatList
+          data={data}
+          renderItem={renderItem}
+          keyExtractor={item => item.id.toString()}
+        />
+      }
 
     </View>
   )

@@ -13,8 +13,7 @@ function TabNavigator() {
 
   return (
     <Tab.Navigator screenOptions={{tabBarIcon: () => null, tabBarLabelStyle: styles.tabBarLabel}}>
-      <Tab.Screen name="Lines" component={TimeTable} options={{ headerShown: false }} />
-      <Tab.Screen name="Table" component={Table} options={{ headerShown: false }} />
+      <Tab.Screen name="Table" component={TimeTable} options={{ headerShown: false }} />
       <Tab.Screen name="Account"  component={Account} options={{ headerShown: false}} />
       <Tab.Screen name="Feedback" component={Feedback} options={{ headerShown: false }} />
     </Tab.Navigator>
