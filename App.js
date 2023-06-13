@@ -9,7 +9,15 @@ import Assistant from './src/Apps/Assistant';
 import User from './src/Apps/User';
 import Details from './src/FirstPage/Details';
 import Table from './src/UserPages/Table';
+import rootReducer from './src/reducers/rootReducer'
+import { Provider } from 'react-redux'
+import { applyMiddleware, compose, createStore } from 'redux'
+import thunkMiddleware from 'redux-thunk'
+import { createLogger } from 'redux-logger';
+const loggerMiddleware = createLogger();
 
+const middlewareEnhancer = applyMiddleware(loggerMiddleware, thunkMiddleware)
+const composedEnhancers = compose(middlewareEnhancer)
 
 const Stack =createStackNavigator();
 const NavStyle ={headerTitleAlign: "center",
@@ -24,13 +32,17 @@ headerTitle: () => (
   />
 ),};
 
+const store = createStore(rootReducer, undefined, composedEnhancers)
+
 function StackNavigator(){
   return(
+    <Provider store={store}>
     <Stack.Navigator>
       <Stack.Screen name="details" component={Details} options={NavStyle}/>
       <Stack.Screen name="assis" component={Assistant} options={NavStyle}/>
       <Stack.Screen name="User" component={User} options={NavStyle}/>
     </Stack.Navigator>
+    </Provider>
   )
 }
 
