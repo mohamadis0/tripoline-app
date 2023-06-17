@@ -5,11 +5,14 @@ import { NavigationContainer } from '@react-navigation/native';
 import Service from '../AssistantPages/Service';
 import Updates from '../AssistantPages/Updates';
 import Settings from '../AssistantPages/Settings';
+import { useState } from 'react';
 
 const Tab = createBottomTabNavigator();
 
-function TabNavigator() {
 
+
+function TabNavigator() {
+  
   return (
     <Tab.Navigator screenOptions={{tabBarIcon: () => null, tabBarLabelStyle: styles.tabBarLabel}}>
       <Tab.Screen name="Service"  component={Service} options={{ headerShown: false}} />

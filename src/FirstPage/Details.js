@@ -46,7 +46,7 @@ const Details = () => {
   
   return (
     <View style={styles.container}>
-      {/* <ImageBackground source={require(image)} style={styles.image}> */}
+      <ImageBackground source={require(image)} style={styles.image}>
         <View style={styles.title}>
           <Text style={styles.text1}>Enter username and {'\n'}         password </Text>
         </View>
@@ -65,7 +65,7 @@ const Details = () => {
           <Text style={styles.text} >Login</Text>
 
         </TouchableOpacity>
-      {/* </ImageBackground> */}
+      </ImageBackground>
     </View>
   )
 

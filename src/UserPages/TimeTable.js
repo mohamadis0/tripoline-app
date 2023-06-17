@@ -5,10 +5,11 @@ import Table from './Table';
 
 const TimeTable = (props) => {
 
+  const [selectedTripId, setSelectedTripId] = useState(null);
   const [isLineDetails, setIsLineDetails] = useState(false)
 
   const handlePress = (item) => {
-    console.log(item)
+    setSelectedTripId(item._id)
     setIsLineDetails(true)
   }
 
@@ -20,7 +21,7 @@ const TimeTable = (props) => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch("https://jsonplaceholder.typicode.com/users");
+      const response = await fetch("https://tripoline-backend-m1it.vercel.app/api/trips");
       const jsonData = await response.json();
       setData(jsonData);
     } catch (error) {
@@ -31,9 +32,9 @@ const TimeTable = (props) => {
     switch (status) {
       case 'ongoing':
           return 'green'
-      case '':
-          return 'yellow'
-      case '':
+      case 'upcoming':
+          return 'orange'
+      case 'completed':
           return 'black'
       default:
         return 'green';
@@ -43,9 +44,9 @@ const TimeTable = (props) => {
     return (
       <TouchableOpacity onPress={() => handlePress(item)}>
       <View style={styles.viewLine}>
-        <Text style={{margin:10}}>{item.name}</Text>
+        <Text style={{margin:10}}>{item.tripName}</Text>
         <View style={{
-            backgroundColor: getColorByStatus(item.status),
+            backgroundColor: getColorByStatus(item.tripStatus),
             borderRadius: 50,
             width: 20,
             height: 20,
@@ -59,13 +60,18 @@ const TimeTable = (props) => {
     );
   };
 
+  const handleTableButtonPress = () => {
+    setSelectedTripId(null);
+    setIsLineDetails(false);
+  };
+
   return (
     <View>
       {
-        isLineDetails ? <Table /> : <FlatList
+        isLineDetails ? <Table tripId={selectedTripId} onButtonPress={handleTableButtonPress} /> : <FlatList
           data={data}
           renderItem={renderItem}
-          keyExtractor={item => item.id.toString()}
+          keyExtractor={item => item._id}
         />
       }
 

@@ -14,47 +14,62 @@ import { Provider } from 'react-redux'
 import { applyMiddleware, compose, createStore } from 'redux'
 import thunkMiddleware from 'redux-thunk'
 import { createLogger } from 'redux-logger';
-const loggerMiddleware = createLogger();
+import { useNavigation } from '@react-navigation/native';
+import { useCallback } from 'react';
 
+const loggerMiddleware = createLogger();
 const middlewareEnhancer = applyMiddleware(loggerMiddleware, thunkMiddleware)
 const composedEnhancers = compose(middlewareEnhancer)
+const Stack = createStackNavigator();
 
-const Stack =createStackNavigator();
-const NavStyle ={headerTitleAlign: "center",
-headerStyle: {
-  backgroundColor: "#115F76",
-},
-headerTitle: () => (
-  <Image
-    source={require('./assets/menu-logo.png')}
-    style={styles.logo}
-    resizeMode="contain"
-  />
-),};
+
+
 
 const store = createStore(rootReducer, undefined, composedEnhancers)
 
-function StackNavigator(){
-  return(
+function StackNavigator() {
+  const [isLineDetails, setIsLineDetails] = useState(false)
+  const NavStyle = {
+    headerTitleAlign: "center",
+    headerStyle: {
+      backgroundColor: "#115F76",
+    },
+    headerLeft: () => null,
+    headerTitle: () => (
+      <Image
+        source={require('./assets/menu-logo.png')}
+        style={styles.logo}
+        resizeMode="contain"
+      />
+    ),
+  
+    // headerRight: ({ handleRightButtonPress }) => (
+  
+    //   <TouchableOpacity onPress={handleRightButtonPress}>
+    //     <Text>logout</Text>
+    //   </TouchableOpacity>
+    // ),
+  };
+  return (
     <Provider store={store}>
-    <Stack.Navigator>
-      <Stack.Screen name="details" component={Details} options={NavStyle}/>
-      <Stack.Screen name="assis" component={Assistant} options={NavStyle}/>
-      <Stack.Screen name="User" component={User} options={NavStyle}/>
-    </Stack.Navigator>
+      <Stack.Navigator>
+        <Stack.Screen name="details" component={Details} options={NavStyle} />
+        <Stack.Screen name="assis" component={Assistant} options={NavStyle} />
+        <Stack.Screen name="User" component={User} options={NavStyle} />
+      </Stack.Navigator>
     </Provider>
   )
 }
 
 
-export default function App(){
- 
-  
-  
-  return(
-    
+export default function App() {
+
+
+
+  return (
+
     <NavigationContainer independent={true}>
-      <StackNavigator/>
+      <StackNavigator />
     </NavigationContainer>
   )
 }

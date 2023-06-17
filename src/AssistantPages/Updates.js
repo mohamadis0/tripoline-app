@@ -1,71 +1,96 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect,useCallback } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { FlatList } from 'react-native-gesture-handler';
+import { useRoute,useFocusEffect } from '@react-navigation/native';
+
 
 
 const colors = ['green', 'yellow', 'black'];
-const colors1 = ['green', 'yellow', 'black'];
 
 const Updates = () => {
-  const [colorIndices, setColorIndices] = useState([0, 0, 0, 0, 0]);
-  const [colorIndices1, setColorIndices1] = useState([0, 0, 0, 0, 0]);
 
-  const handleClick = (index) => {
-    setColorIndices((prevState) => {
-      const newState = [...prevState];
-      newState[index] = (newState[index] + 1) % colors.length;
-      return newState;
-    });
-  };
-  const handleClick1 = (index) => {
-    setColorIndices1((prevState) => {
-      const newState = [...prevState];
-      newState[index] = (newState[index] + 1) % colors1.length;
-      return newState;
-    });
-  };
+  const getColorByStatus = (status) => {
+    switch (status) {
+      case 'waiting':
+        return 'green'
+      case 'arrived':
+        return 'orange'
+      case 'passed':
+        return 'black'
+      default:
+        return 'green';
+    }
+  }
+  const [data, setData] = useState([]);
 
-  const renderItems = () => {
-    return colorIndices.map((index, i) => (
-      <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-      <View key={i} style={{ flexDirection: 'row', justifyContent: 'space-between', margin: 20 }}>
-        <TouchableOpacity
-          onPress={() => handleClick(i)}
-          style={{
-            backgroundColor: colors[index],
-            borderRadius: 50,
-            width: 25,
-            height: 25,
-          }}
-        />
-      </View>
-      <View key={i} style={{ flexDirection: 'row', justifyContent: 'space-between', margin: 20 }}>
-      <Text>ساحة النور</Text>
-      </View>
-      <View key={i} style={{ flexDirection: 'row', justifyContent: 'space-between', margin: 20 }}>
-        <TouchableOpacity
-          onPress={() => handleClick1(i)}
-          style={{
-            backgroundColor: colors1[index],
-            borderRadius: 50,
-            width: 25,
-            height: 25,
-          }}
-        />
-      </View>
-      </View>
-    ));
+  useEffect(() => {
+    fetchData();
+  }, [tripID]);
+  const [, forceUpdate] = useState();
+  const fetchData = async () => {
+    try {
+      const response = await fetch(`https://tripoline-backend-m1it.vercel.app/api/stations/trip/${tripID}`);
+      const jsonData = await response.json();
+      setData(jsonData);
+      console.log(data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
   };
+  const route = useRoute();
+  const { trip, bus, driver, tripID } = route.params;
 
+  const renderItem = ({ item }) => {
+    // console.log(item);
+
+    return (
+
+      <View style={styles.viewLine}>
+        <Text style={{ margin: 10 }}>{item.stationName}</Text>
+        <View style={{
+          backgroundColor:
+            getColorByStatus(item.stationStatus),
+          borderRadius: 50,
+          width: 20,
+          height: 20,
+          margin: 10,
+        }} >
+
+        </View>
+      </View>
+
+
+    );
+  };
+  
   return (
+    
     <View style={{ flexDirection: 'column', justifyContent: 'center' }}>
-      <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-        <Text>Abaa----Koura Lane{'\n'}</Text>
-      </View>
-      {renderItems()}
+      <Text>Tripid: {tripID}</Text>
+      <Text>Trip: {trip}</Text>
+      <Text>Bus: {bus}</Text>
+      <Text>Driver: {driver}</Text>
+      <FlatList
+        data={data}
+        renderItem={renderItem}
+        keyExtractor={item => item._id
+        //   {
+        //   console.log(item._id); 
+        //   return item._id;
+        // }
+      }
+      />
     </View>
   );
 };
 
 export default Updates;
+const styles = StyleSheet.create({
+  viewLine: {
+    borderWidth: 2,
+    margin: 5,
+    flexDirection: 'row',
 
+  },
 
+});
