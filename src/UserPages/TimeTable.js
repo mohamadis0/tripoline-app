@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Table from './Table';
+import { useNavigation } from '@react-navigation/core';
+import { Button } from 'react-native-elements';
 
 
 const TimeTable = (props) => {
+  const navigation = useNavigation()
 
-  const [selectedTripId, setSelectedTripId] = useState(null);
-  const [isLineDetails, setIsLineDetails] = useState(false)
+ 
 
   const handlePress = (item) => {
-    setSelectedTripId(item._id)
-    setIsLineDetails(true)
+  
+    navigation.navigate('Table', { tripId: item._id });
   }
 
   const [data, setData] = useState([]);
@@ -41,8 +43,12 @@ const TimeTable = (props) => {
     }
   }
   const renderItem = ({ item }) => {
+   
     return (
-      <TouchableOpacity onPress={() => handlePress(item)}>
+      <TouchableOpacity onPress={
+        () => handlePress(item)
+      }
+        >
       <View style={styles.viewLine}>
         <Text style={{margin:10}}>{item.tripName}</Text>
         <View style={{
@@ -60,15 +66,14 @@ const TimeTable = (props) => {
     );
   };
 
-  const handleTableButtonPress = () => {
-    setSelectedTripId(null);
-    setIsLineDetails(false);
-  };
+ 
 
   return (
     <View>
+      
       {
-        isLineDetails ? <Table tripId={selectedTripId} onButtonPress={handleTableButtonPress} /> : <FlatList
+    
+         <FlatList
           data={data}
           renderItem={renderItem}
           keyExtractor={item => item._id}

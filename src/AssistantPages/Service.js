@@ -3,6 +3,7 @@ import React from 'react'
 import { useState, useEffect } from 'react';
 import { Picker as SelectPicker } from '@react-native-picker/picker';
 
+
 const Service = ({navigation}) => {
 
   const [selectedTrip, setSelectedTrip] = useState('');

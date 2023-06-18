@@ -1,22 +1,23 @@
-import { View, Text,Button, StyleSheet } from 'react-native'
+import { View, Text, Button, StyleSheet, FlatList } from 'react-native'
 import React from 'react'
-import { useState, useEffect } from 'react';
-import { FlatList } from 'react-native-gesture-handler';
+import { useState, useEffect, } from 'react';
+import { useRoute } from '@react-navigation/core';
 
 
 
-const Table = ({ onButtonPress, tripId  }) => {
-  const handlePress = () => {
-    onButtonPress();
-  };
-  const getColorByStatus = (status)=>{
+const Table = () => {
+
+  const route = useRoute();
+  const tripId = route.params.tripId;
+ 
+  const getColorByStatus = (status) => {
     switch (status) {
       case 'waiting':
-          return 'green'
+        return 'green'
       case 'arrived':
-          return 'orange'
+        return 'orange'
       case 'passed':
-          return 'black'
+        return 'black'
       default:
         return 'green';
     }
@@ -39,34 +40,31 @@ const Table = ({ onButtonPress, tripId  }) => {
   const renderItem = ({ item }) => {
     return (
       <View style={styles.viewLine}>
-        <Text style={{margin:10}}>{item.stationName}</Text>
+        <Text style={{ margin: 10 }}>{item.stationName}</Text>
         <View style={{
-            backgroundColor: getColorByStatus(item.stationStatus),
-            borderRadius: 50,
-            width: 20,
-            height: 20,
-            margin: 10,
-          }} >
+          backgroundColor: getColorByStatus(item.stationStatus),
+          borderRadius: 50,
+          width: 20,
+          height: 20,
+          margin: 10,
+        }} >
 
         </View>
       </View>
     );
   };
- 
+
   return (
-    <View
-    // style={{ alignItems:'center',}}
-    >
-      <View 
-      style={{width:100, length:50, margin:10}}
+    <View>
+      <View
+        style={{ width: 100, length: 50, margin: 10 }}
       >
-       <Button  title={"Back"} onPress={handlePress} />
-       </View>
-       <FlatList
-          data={data}
-          renderItem={renderItem}
-          keyExtractor={item => item._id}
-        />
+      </View>
+      <FlatList
+        data={data}
+        renderItem={renderItem}
+        keyExtractor={item => item._id}
+      />
     </View>
   )
 }
