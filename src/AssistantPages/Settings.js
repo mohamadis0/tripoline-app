@@ -1,9 +1,6 @@
-import { View, Text, Button } from 'react-native'
-import React from 'react'
 import { useNavigation } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { NavigationContainer } from '@react-navigation/native';
-import Details from '../FirstPage/Details';
+import React from 'react';
+import { Button, Text, View } from 'react-native';
 
 
 const Settings = () => {

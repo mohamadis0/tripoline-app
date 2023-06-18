@@ -1,9 +1,7 @@
-import React, { useState, useEffect,useCallback } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { FlatList } from 'react-native-gesture-handler';
-import { useRoute,useFocusEffect } from '@react-navigation/native';
-
-
+import { useRoute } from '@react-navigation/native';
+import React, { useEffect, useState } from 'react';
+import { FlatList } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
 const colors = ['green', 'yellow', 'black'];
 
@@ -26,7 +24,6 @@ const Updates = () => {
   useEffect(() => {
     fetchData();
   }, [tripID]);
-  const [, forceUpdate] = useState();
   const fetchData = async () => {
     try {
       const response = await fetch(`https://tripoline-backend-m1it.vercel.app/api/stations/trip/${tripID}`);
@@ -64,7 +61,7 @@ const Updates = () => {
   };
   
   return (
-    
+     
     <View style={{ flexDirection: 'column', justifyContent: 'center' }}>
       <Text>Tripid: {tripID}</Text>
       <Text>Trip: {trip}</Text>

@@ -2,13 +2,8 @@ import { View, Text, StyleSheet, Button } from 'react-native'
 import React from 'react'
 import { useState, useEffect } from 'react';
 import { Picker as SelectPicker } from '@react-native-picker/picker';
-import { useNavigation } from '@react-navigation/native';
 
-
-const Service = () => {
-
-  const navigation = useNavigation();
-
+const Service = ({navigation}) => {
 
   const [selectedTrip, setSelectedTrip] = useState('');
   const [selectedBus, setSelectedBus] = useState('');
