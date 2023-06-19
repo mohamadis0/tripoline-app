@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet,FlatList } from 'react-native';
 import { useRoute, useFocusEffect } from '@react-navigation/native';
+import { FontAwesome } from '@expo/vector-icons';
 
 const Updates = () => {
 
@@ -57,8 +58,8 @@ const Updates = () => {
     return (
 
       <View style={styles.viewLine}>
-
-        <Text style={{ margin: 10 }}>{item.stationName}</Text>
+        <FontAwesome name="hand-stop-o" size={40} color="#115F76" />
+        <Text style={styles.text}>{item.stationName}</Text>
         <TouchableOpacity onPress={() => changeStatus(item)}>
           <View style={{
             backgroundColor:
@@ -80,7 +81,7 @@ const Updates = () => {
 
     <View style={{ flexDirection: 'column', justifyContent: 'center' }}>
       <View style={{ alignItems: 'center' }}>
-        <Text style={{ fontSize: 40, fontWeight: 'bold' }}>{trip}</Text>
+        <Text style={{ fontSize: 40, fontWeight: 'bold',color: "#35474C",margin:'5%' }}>{trip}</Text>
       </View>
       <FlatList
         data={data}
@@ -96,10 +97,16 @@ export default Updates;
 const styles = StyleSheet.create({
   viewLine: {
 
-    margin: 5,
+    margin: '5%',
     flexDirection: 'row',
     justifyContent: "space-between",
+    alignItems:"center",
 
+  },
+  text:{
+    margin: 10,
+    fontSize:25,
+    color:"#115F76"
   },
 
 });

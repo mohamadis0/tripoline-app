@@ -9,7 +9,9 @@ import Updates from '../AssistantPages/Updates';
 import { useNavigation } from '@react-navigation/native';
 import LoginScreen from '../FirstPage/LoginScreen';
 import { useDispatch } from 'react-redux'
-
+import { StatusBar } from 'expo-status-bar';
+import { AntDesign } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
 
 
 const Stack = createNativeStackNavigator();
@@ -24,6 +26,14 @@ function DrawerNavigator() {
     dispatch({ type: "LOGOUT"})
   }
   const NavStyle = {
+    tabBarStyle: {
+      height: '7%',
+      paddingHorizontal: 5,
+      paddingTop: 0,
+      backgroundColor: '#E4EDEF',
+      position: 'absolute',
+      borderTopWidth: 0,
+  },
     headerTitleAlign: "center",
     headerStyle: {
       backgroundColor: "#115F76",
@@ -32,7 +42,7 @@ function DrawerNavigator() {
       <TouchableOpacity
         onPress={handleLogout}
         
-        style={{ backgroundColor: "#fde052", margin: 20, marginBottom: 30, height: 45, width: 70, borderRadius: 15, justifyContent: "center", alignItems: 'center' }}>
+        style={{ backgroundColor: "#fde052",  margin: "18%", marginBottom: "22%", height: "60%", width: "65%", borderRadius: 15, justifyContent: "center", alignItems: 'center' }}>
         <Text style={{ color: "#115F76", fontWeight: "bold" }}>Logout</Text>
       </TouchableOpacity>
 
@@ -49,10 +59,29 @@ function DrawerNavigator() {
 
 
   return (
-    <BottomTab.Navigator screenOptions={{ tabBarLabelStyle: styles.tabBarLabel }}>
-      <BottomTab.Screen name="Service" component={Service} options={NavStyle} />
-      <BottomTab.Screen name="Updates" component={Updates} options={NavStyle} />
-      <BottomTab.Screen name="Settings" component={Settings} options={NavStyle} />
+    <BottomTab.Navigator screenOptions={NavStyle} tabBarOptions={{
+      labelStyle: { fontSize: 15, color:"#115F76" },
+      
+       activeBackgroundColor: '#BCD2D8',
+      }}>
+      <BottomTab.Screen name="Service" component={Service} options={{ tabBarLabel: 'Service',
+          tabBarIcon: () => (
+            <MaterialIcons name="miscellaneous-services" size={26} color={"#115F76"} />
+          ),
+          
+          }} />
+      <BottomTab.Screen name="Updates" component={Updates} options={{ tabBarLabel: 'Update',
+          tabBarIcon: () => (
+            <MaterialIcons name="system-update-alt" size={26} color={"#115F76"} />
+          ),
+          
+          }}  />
+      <BottomTab.Screen name="Settings" component={Settings} options={{ tabBarLabel: 'Settings',
+          tabBarIcon: () => (
+            <MaterialIcons name="settings-applications" size={26} color={"#115F76"} />
+          ),
+          
+          }}  />
     </BottomTab.Navigator>
   );
 }
@@ -61,7 +90,8 @@ const Assistant = () => {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{ tabBarLabelStyle: styles.tabBarLabel }}>
+      <StatusBar style="auto"/>
+      <Stack.Navigator >
         <Stack.Screen
           name="Drawer"
           component={DrawerNavigator}

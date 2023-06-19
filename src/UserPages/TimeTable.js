@@ -3,6 +3,7 @@ import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native
 import Table from './Table';
 import { useNavigation } from '@react-navigation/core';
 import { Button } from 'react-native-elements';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 
 const TimeTable = (props) => {
@@ -50,13 +51,16 @@ const TimeTable = (props) => {
       }
         >
       <View style={styles.viewLine}>
-        <Text style={{margin:10}}>{item.tripName}</Text>
+      <MaterialCommunityIcons name="road-variant" size={30} color="#34555F"  style={{margin:'3%'}}/>
+        <Text style={{margin:10, fontSize:25,color:"#34555F"}}>{item.tripName}</Text>
         <View style={{
             backgroundColor: getColorByStatus(item.tripStatus),
             borderRadius: 50,
-            width: 20,
-            height: 20,
-            margin: 10,
+            borderColor:"#1F3339",
+            width: "9%",
+            height: "63%",
+            margin: "4%",
+            borderWidth:2,
           }} >
 
         </View>
@@ -70,7 +74,8 @@ const TimeTable = (props) => {
 
   return (
     <View>
-      
+       <View style={{alignItems: "center"  }}>
+        <Text style={styles.title} >Trips</Text></View>
       {
     
          <FlatList
@@ -87,9 +92,19 @@ const TimeTable = (props) => {
 export default TimeTable
 const styles = StyleSheet.create({
   viewLine:{
-    borderWidth:2,
+    borderColor:"#115F76",
+    borderRadius:20,
+    borderWidth:1,
     margin:5,
     flexDirection:'row',
+    justifyContent:'space-between',
+    alignItems:'center'
 
+  },
+  title: {
+    margin: '4%',
+    color: "#35474C",
+    fontSize: 40,
+    fontWeight: 'bold',
   },
 });

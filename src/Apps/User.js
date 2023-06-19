@@ -10,10 +10,12 @@ import TimeTable from '../UserPages/TimeTable'
 import LoginScreen from '../FirstPage/LoginScreen';
 import { useDispatch } from 'react-redux'
 import Table from '../UserPages/Table';
-
+import { AntDesign } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
+import { StatusBar } from 'expo-status-bar';
 
 const Stack = createNativeStackNavigator();
-const BottomTab = createBottomTabNavigator();
+const BottomTab = createBottomTabNavigator()
 
 
 
@@ -25,6 +27,14 @@ function DrawerNavigator() {
     dispatch({ type: "LOGOUT" })
   }
   const NavStyle = {
+    tabBarStyle: {
+      height: '7%',
+      paddingHorizontal: 5,
+      paddingTop: 0,
+      backgroundColor: '#E4EDEF',
+      position: 'absolute',
+      borderTopWidth: 0,
+  },
     headerTitleAlign: "center",
     headerStyle: {
       backgroundColor: "#115F76",
@@ -32,7 +42,7 @@ function DrawerNavigator() {
     headerRight: () => (
       <TouchableOpacity
         onPress={handleLogout}
-        style={{ backgroundColor: "#fde052", margin: 20, marginBottom: 30, height: 45, width: 70, borderRadius: 15, justifyContent: "center", alignItems: 'center' }}>
+        style={{ backgroundColor: "#fde052", margin: "18%", marginBottom: "22%", height: "60%", width: "65%", borderRadius: 15, justifyContent: "center", alignItems: 'center' }}>
         <Text style={{ color: "#115F76", fontWeight: "bold" }}>Logout</Text>
       </TouchableOpacity>
 
@@ -48,34 +58,42 @@ function DrawerNavigator() {
 
 
   return (
-    <BottomTab.Navigator screenOptions={{ tabBarLabelStyle: styles.tabBarLabel }}>
-      <BottomTab.Screen name="TimeTable" component={TimeTable} options={NavStyle}  />
-      <BottomTab.Screen name="Account" component={Account} options={NavStyle} />
-      <BottomTab.Screen name="Feedback" component={Feedback} options={NavStyle} />
+    <BottomTab.Navigator screenOptions={NavStyle} tabBarOptions={{
+      labelStyle: { fontSize: 15, color:"#115F76" },
+      
+       activeBackgroundColor: '#BCD2D8',
+      }} >
+      <BottomTab.Screen name="Timetable" component={TimeTable}  options={{ tabBarLabel: 'Table',
+          tabBarIcon: () => (
+            <AntDesign name="table" size={26} color={"#115F76"} />
+          ),
+          
+          }} />
+      <BottomTab.Screen name="Account" component={Account} options={{ tabBarLabel: 'Account',
+          tabBarIcon: () => (
+            <MaterialIcons name="account-box" size={26} color={"#115F76"} />
+          ),
+          
+          }} /> 
+      <BottomTab.Screen name="Feedback" component={Feedback} options={{ tabBarLabel: 'Feedback',
+          tabBarIcon: () => (
+            <MaterialIcons name="feedback" size={26} color={"#115F76"} />
+          ),
+          
+          }} />  
     </BottomTab.Navigator>
   );
 }
 
 const User = () => {
   
-  const dispatch = useDispatch()
-  const handleLogout=()=>{
-    navigation.navigate('LoginScreen')
-    dispatch({ type: "LOGOUT" })
-  }
   const NavStyle = {
+    
     headerTitleAlign: "center",
     headerStyle: {
       backgroundColor: "#115F76",
     },
-    headerRight: () => (
-      <TouchableOpacity
-        onPress={handleLogout}
-        style={{ backgroundColor: "#fde052", margin: 20, marginBottom: 30, height: 45, width: 70, borderRadius: 15, justifyContent: "center", alignItems: 'center' }}>
-        <Text style={{ color: "#115F76", fontWeight: "bold" }}>Logout</Text>
-      </TouchableOpacity>
-
-    ),
+   
     headerTitle: () => (
       <Image
         source={require('../../assets/menu-logo.png')}
@@ -87,6 +105,7 @@ const User = () => {
 
   return (
     <NavigationContainer>
+      <StatusBar style="auto"/>
       <Stack.Navigator >
         <Stack.Screen
           name="Drawer"
@@ -94,6 +113,7 @@ const User = () => {
           options={{
             headerShown: false,
           }}
+          
         />
         <Stack.Screen
           name="LoginScreen"

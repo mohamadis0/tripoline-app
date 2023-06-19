@@ -1,10 +1,12 @@
-import { View, Text, StyleSheet, Button } from 'react-native'
+import { View, Text, StyleSheet, Button, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { useState, useEffect } from 'react';
 import { Picker as SelectPicker } from '@react-native-picker/picker';
+import { Ionicons } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 
-const Service = ({navigation}) => {
+const Service = ({ navigation }) => {
 
   const [selectedTrip, setSelectedTrip] = useState('');
   const [selectedBus, setSelectedBus] = useState('');
@@ -53,7 +55,7 @@ const Service = ({navigation}) => {
     }
   };
   const handleStartService = () => {
-    
+
     navigation.navigate('Updates', {
       tripID: selectedTripKey,
       trip: selectedTrip,
@@ -64,43 +66,63 @@ const Service = ({navigation}) => {
 
   return (
     <View >
-      <View style={{ flexDirection: "row", justifyContent: "center" }}>
-        <Text >Welcome assistant</Text></View>
-      <SelectPicker
-        selectedValue={selectedTrip}
-        onValueChange={(itemValue, itemIndex) => {
-          setSelectedTrip(itemValue);
-          setSelectedTripKey(data[itemIndex]._id); 
-        }}
-      >
-        {data.map(item => (
-          <SelectPicker.Item key={item._id} label={item.tripName} value={item.tripName} />
-        ))}
-      </SelectPicker>
-      <SelectPicker
-        selectedValue={selectedBus}
-        onValueChange={(itemValue) => setSelectedBus(itemValue)}
-      >
-        {data1.map(item => (
-          <SelectPicker.Item key={item._id} label={item.Busname} value={item.Busname} />
-        ))}
-      </SelectPicker>
-      <SelectPicker
-        selectedValue={selectedDriver}
-        onValueChange={(itemValue) => setSelectedDriver(itemValue)}
-      >
-        {data2.map(item => (
-          <SelectPicker.Item key={item._id} label={item.DriverName} value={item.DriverName} />
-        ))}
-      </SelectPicker>
-
-
-      <View style={{ flexDirection: "row", justifyContent: "center" }}>
-        <View style={{ margin: 20, }}>
-          <Button title={"Start Service"} onPress={handleStartService} />
+      <View style={{ justifyContent: "center" }}>
+        <Text style={styles.title} >Welcome assistant</Text></View>
+      <View style={styles.picker}>
+        <View style={{ position: 'absolute', left: 0 }} >
+          <MaterialCommunityIcons name="road" size={50} color="#115F76" />
         </View>
-        <View style={{ margin: 20, }}>
-          <Button title={"Stop service"} />
+        <SelectPicker style={{ marginLeft: "13%" }}
+          selectedValue={selectedTrip}
+          onValueChange={(itemValue, itemIndex) => {
+            setSelectedTrip(itemValue);
+            setSelectedTripKey(data[itemIndex]._id);
+          }}
+        >
+          {data.map(item => (
+            <SelectPicker.Item key={item._id} label={item.tripName} value={item.tripName} style={styles.pickertext} />
+          ))}
+        </SelectPicker>
+      </View>
+      <View style={styles.picker1}>
+        <View style={{ position: 'absolute', left: 0 }} >
+          <Ionicons name="bus" size={50} color="#115F76" />
+        </View>
+        <View  >
+          <SelectPicker style={{ marginLeft: "13%" }}
+            selectedValue={selectedBus}
+            onValueChange={(itemValue) => setSelectedBus(itemValue)}
+          >
+            {data1.map(item => (
+              <SelectPicker.Item key={item._id} label={item.Busname} value={item.Busname} style={styles.pickertext} />
+            ))}
+          </SelectPicker>
+        </View>
+      </View>
+      <View style={styles.picker2}>
+      <View style={{ position: 'absolute', left: 0 }} >
+      <Ionicons name="person" size={50} color="#115F76" />
+        </View>
+        <SelectPicker style={{ marginLeft: "13%" }}
+          selectedValue={selectedDriver}
+          onValueChange={(itemValue) => setSelectedDriver(itemValue)}
+        >
+          {data2.map(item => (
+            <SelectPicker.Item key={item._id} label={item.DriverName} value={item.DriverName} style={styles.pickertext} />
+          ))}
+        </SelectPicker>
+      </View>
+
+      <View style={{ flexDirection: "row", justifyContent: "center", }}>
+        <View >
+          <TouchableOpacity onPress={handleStartService} style={styles.topacity} >
+            <Text style={styles.opacitytext}>Start Service</Text>
+          </TouchableOpacity>
+        </View>
+        <View >
+          <TouchableOpacity style={styles.topacity} >
+            <Text style={styles.opacitytext}>Stop Service</Text>
+          </TouchableOpacity>
         </View>
       </View>
 
@@ -109,3 +131,69 @@ const Service = ({navigation}) => {
 }
 
 export default Service
+const styles = StyleSheet.create({
+  title: {
+    margin: '4%',
+    color: "#35474C",
+    fontSize: 40,
+    fontWeight: 'bold',
+  },
+  pickertext: {
+    color: "#115F76",
+    fontSize: 25,
+
+  },
+  picker: {
+    justifyContent: "center",
+    borderWidth: 3,
+    height: '15%',
+    borderColor: "#115F76",
+    borderTopLeftRadius: 30,
+    borderTopRightRadius:30,
+    margin: '4%',
+    marginBottom: 0,
+
+
+  },
+  picker1: {
+    justifyContent: 'center',
+    borderWidth: 3,
+    height: '15%',
+    borderColor: "#115F76",
+    marginLeft: '4%',
+    marginRight: '4%',
+    marginBottom: 0,
+    borderTopWidth: 0,
+    borderBottomWidth: 0,
+  },
+  picker2: {
+    justifyContent: "center",
+    borderWidth: 3,
+    height: '15%',
+    borderColor: "#115F76",
+    borderBottomRightRadius: 30,
+    borderBottomLeftRadius:30,
+    marginLeft: '4%',
+    marginRight: '4%',
+    marginBottom: '4%',
+
+  },
+  topacity: {
+    backgroundColor: "#fde052",
+    padding: '2%',
+    marginTop: "12%",
+    marginLeft: '19%',
+    margin: '8%',
+    height: "25%",
+    width: "65%",
+    borderRadius: 15,
+    justifyContent: "center",
+    alignItems: 'center'
+  },
+  opacitytext: {
+    color: "#115F76",
+    fontWeight: "bold",
+    fontSize: 15,
+  }
+
+})

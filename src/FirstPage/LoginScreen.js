@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native'
 import axios from 'axios'
 import {LinearGradient} from 'expo-linear-gradient';
 import { useDispatch } from 'react-redux'
+import { StatusBar } from 'expo-status-bar'
 
 const LoginScreen = () => {
 
@@ -32,6 +33,7 @@ const LoginScreen = () => {
   
   return (
     <View style={styles.container}>
+      <StatusBar style="auto"/>
       <LinearGradient
           colors={["#115F76", '#407E91','#588F9F' ]}
           style={styles.gradient}

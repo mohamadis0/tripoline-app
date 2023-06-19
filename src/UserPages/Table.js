@@ -2,6 +2,7 @@ import { View, Text, Button, StyleSheet, FlatList } from 'react-native'
 import React from 'react'
 import { useState, useEffect, } from 'react';
 import { useRoute } from '@react-navigation/core';
+import { FontAwesome } from '@expo/vector-icons';
 
 
 
@@ -40,13 +41,16 @@ const Table = () => {
   const renderItem = ({ item }) => {
     return (
       <View style={styles.viewLine}>
-        <Text style={{ margin: 10 }}>{item.stationName}</Text>
+        <FontAwesome name="hand-stop-o" size={30} color="#34555F" style={{margin:'3%'}}/>
+        <Text style={{ margin: 10,fontSize:25,color:"#34555F" }}>{item.stationName}</Text>
         <View style={{
           backgroundColor: getColorByStatus(item.stationStatus),
           borderRadius: 50,
-          width: 20,
-          height: 20,
-          margin: 10,
+          borderColor:"#1F3339",
+          width: "9%",
+          height: "63%",
+          margin: "4%",
+          borderWidth:2,
         }} >
 
         </View>
@@ -56,10 +60,8 @@ const Table = () => {
 
   return (
     <View>
-      <View
-        style={{ width: 100, length: 50, margin: 10 }}
-      >
-      </View>
+      <View style={{alignItems: "center"  }}>
+        <Text style={styles.title} >Stations</Text></View>
       <FlatList
         data={data}
         renderItem={renderItem}
@@ -72,10 +74,20 @@ const Table = () => {
 export default Table
 const styles = StyleSheet.create({
   viewLine: {
-    borderWidth: 2,
-    margin: 5,
-    flexDirection: 'row',
+    borderColor:"#115F76",
+    borderRadius:20,
+    borderWidth:1,
+    margin:"4%",
+    flexDirection:'row',
+    justifyContent:'space-between',
+    alignItems:'center'
 
+  },
+  title: {
+    margin: '4%',
+    color: "#35474C",
+    fontSize: 40,
+    fontWeight: 'bold',
   },
 
 });
