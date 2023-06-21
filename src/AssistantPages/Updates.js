@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet,FlatList } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
 import { useRoute, useFocusEffect } from '@react-navigation/native';
 import { FontAwesome } from '@expo/vector-icons';
+import axios from 'axios';
 
 const Updates = () => {
 
@@ -20,6 +21,7 @@ const Updates = () => {
     }
   }
   const [data, setData] = useState([]);
+  const [updatedData, setUpdatedData] =useState([]);
   const route = useRoute();
   const { trip, bus, driver, tripID } = route.params;
 
@@ -32,24 +34,49 @@ const Updates = () => {
       const response = await fetch(`https://tripoline-backend-m1it.vercel.app/api/stations/trip/${tripID}`);
       const jsonData = await response.json();
       setData(jsonData);
+      // console.log(data)
     } catch (error) {
       console.error('Error fetching data:', error);
     }
   };
 
   const changeStatus = (item) => {
-    console.log(item)
-    item.stationStatus = "waiting"
-    const updatedData = data.map(e=>{
-      if(item.id === e.id){
+    // console.log(item)
+    if (item.stationStatus === "passed") {
+      item.stationStatus = "waiting"
+    } else if (item.stationStatus === "waiting") {
+      item.stationStatus = "arrived"
+    } else {
+      item.stationStatus = "passed"
+    }
+    const updatedData = data.map(e => {
+      if (item.id === e.id) {
         return item;
       }
       return e;
     })
-    setData(updatedData);
-    fetch("update", {body:item})
-  }
 
+    setUpdatedData(updatedData);
+    // console.log(updatedData[0])
+    // console.log({...updatedData[0]})
+    // console.log(updatedData[0]._id)
+  //  const update= async () => {
+    axios.put(`https://tripoline-backend-m1it.vercel.app/api/stations/${updatedData[0]._id}`, {...updatedData[0]})
+    .then(response => {
+      console.log(response.data);
+    })
+    .catch(error => {
+      console.error(error.response);
+    });
+      // try {
+      //   console.log(updatedData)
+      //   const response1 = await axios.put(`https://tripoline-backend-m1it.vercel.app/api/stations/${updatedData.id}`, updatedData);
+      // } catch (error) {
+      //   console.error(error.response1);
+      // }
+    // };
+  }
+ 
 
 
   const renderItem = ({ item }) => {
@@ -64,10 +91,11 @@ const Updates = () => {
           <View style={{
             backgroundColor:
               getColorByStatus(item.stationStatus),
+              borderWidth:2,
             borderRadius: 50,
-            width: 20,
-            height: 20,
-            margin: 10,
+            width: 35,
+            height: 35,
+            margin: "5%",
           }} >
           </View>
         </TouchableOpacity>
@@ -81,7 +109,7 @@ const Updates = () => {
 
     <View style={{ flexDirection: 'column', justifyContent: 'center' }}>
       <View style={{ alignItems: 'center' }}>
-        <Text style={{ fontSize: 40, fontWeight: 'bold',color: "#35474C",margin:'5%' }}>{trip}</Text>
+        <Text style={{ fontSize: 40, fontWeight: 'bold', color: "#35474C", margin: '3%' }}>{trip}</Text>
       </View>
       <FlatList
         data={data}
@@ -100,13 +128,13 @@ const styles = StyleSheet.create({
     margin: '5%',
     flexDirection: 'row',
     justifyContent: "space-between",
-    alignItems:"center",
+    alignItems: "center",
 
   },
-  text:{
+  text: {
     margin: 10,
-    fontSize:25,
-    color:"#115F76"
+    fontSize: 25,
+    color: "#115F76"
   },
 
 });

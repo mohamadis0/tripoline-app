@@ -15,9 +15,9 @@ const Settings = () => {
     <View>
 
        <View
-      style={{width:100, length:50, margin:10}}
+      
       >
-      <Button onPress={handleRightButtonPress} title='Logout'/>
+     
 
       <Text>Settings</Text>
       </View> 

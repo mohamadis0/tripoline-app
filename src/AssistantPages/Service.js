@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { Picker as SelectPicker } from '@react-native-picker/picker';
 import { Ionicons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import axios from 'axios';
 
 
 const Service = ({ navigation }) => {
@@ -54,7 +55,23 @@ const Service = ({ navigation }) => {
       console.error('Error fetching data:', error);
     }
   };
-  const handleStartService = () => {
+  const handleStartService = (item) => {
+    const tripItem = data.map(e => {
+      if (selectedTripKey === e.id) {
+        return item;
+      }
+      return e;
+    })
+
+      tripItem[0].tripStatus= "ongoing"
+      console.log({...tripItem})
+      axios.put(`https://tripoline-backend-m1it.vercel.app/api/trips/${selectedTripKey}`, {...tripItem[0]})
+      .then(response => {
+        console.log(response.data);
+      })
+      .catch(error => {
+        console.error(error.response);
+      });
 
     navigation.navigate('Updates', {
       tripID: selectedTripKey,
@@ -63,6 +80,24 @@ const Service = ({ navigation }) => {
       driver: selectedDriver,
     });
   };
+  const handleStopService = (item) => {
+    const tripItem = data.map(e => {
+      if (selectedTripKey === e.id) {
+        return item;
+      }
+      return e;
+    })
+
+      tripItem[0].tripStatus= "completed"
+      console.log({...tripItem})
+      axios.put(`https://tripoline-backend-m1it.vercel.app/api/trips/${selectedTripKey}`, {...tripItem[0]})
+      .then(response => {
+        console.log(response.data);
+      })
+      .catch(error => {
+        console.error(error.response);
+      });
+    };
 
   return (
     <View >
@@ -120,7 +155,7 @@ const Service = ({ navigation }) => {
           </TouchableOpacity>
         </View>
         <View >
-          <TouchableOpacity style={styles.topacity} >
+          <TouchableOpacity style={styles.topacity} onPress={handleStopService}>
             <Text style={styles.opacitytext}>Stop Service</Text>
           </TouchableOpacity>
         </View>

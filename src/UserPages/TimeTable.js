@@ -40,7 +40,7 @@ const TimeTable = (props) => {
       case 'completed':
           return 'black'
       default:
-        return 'green';
+        return 'orange';
     }
   }
   const renderItem = ({ item }) => {
