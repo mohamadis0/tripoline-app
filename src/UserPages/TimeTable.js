@@ -2,14 +2,68 @@ import React, { useEffect, useState } from 'react';
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Table from './Table';
 import { useNavigation } from '@react-navigation/core';
-import { Button } from 'react-native-elements';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import EventSource, { EventSourceListener } from "react-native-sse";
+import axios from 'axios';
+import {LogBox} from 'react-native';
+
+LogBox.ignoreAllLogs();
+
 
 
 const TimeTable = (props) => {
   const navigation = useNavigation()
+//   const eventSource = new EventSource('http://localhost:3000/api/updates');
+//  console.log(eventSource)
 
- 
+//   eventSource.addEventListener('message', (event) => {
+//     console.log("New message event:", event.data);
+//   });
+  
+//   eventSource.addEventListener('open', (event) => {
+//     console.log("Opened event:");
+//   });
+  
+  
+  // const es = new EventSource('http://10.0.2.2:3000/api/updates');
+  // const getUpdates = async()=>{
+  //   console.log('pass')
+  //   console.log(es)
+  //   // const res = await axios.get('http://127.0.0.1:3000/api/updates');
+  // //   console.log(res.data);
+  // }
+
+  // // console.log(es)
+  // es.addEventListener("open", (event) => {
+  //   console.log("Open SSE connection.");
+    
+  // });
+  
+  // es.addEventListener("message", (event) => {
+  //   console.log("New message event:", event.data);
+  // });
+  
+  // es.addEventListener("error", (event) => {
+  //   if (event.type === "error") {
+  //     console.error("Connection error:", event.message);
+  //   } else if (event.type === "exception") {
+  //     console.error("Error:", event.message, event.error);
+  //   }
+  // });
+  
+  // es.addEventListener("close", (event) => {
+  //   console.log("Close SSE connection.");
+  // });
+
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const handleRefresh = () => {
+    setIsRefreshing(true);
+    console.log("Refresh");
+    setTimeout(() => {
+      setIsRefreshing(false);
+    }, 100);
+  };
 
   const handlePress = (item) => {
   
@@ -18,8 +72,10 @@ const TimeTable = (props) => {
 
   const [data, setData] = useState([]);
   
+  
   useEffect(() => {
     fetchData();
+  
   }, []);
 
   const fetchData = async () => {
@@ -27,6 +83,7 @@ const TimeTable = (props) => {
       const response = await fetch("https://tripoline-backend-m1it.vercel.app/api/trips");
       const jsonData = await response.json();
       setData(jsonData);
+    
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -82,6 +139,11 @@ const TimeTable = (props) => {
           data={data}
           renderItem={renderItem}
           keyExtractor={item => item._id}
+          refreshing={isRefreshing}
+          onRefresh={() => {
+            handleRefresh();
+            fetchData();
+          }} 
         />
       }
 

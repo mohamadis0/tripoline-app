@@ -3,6 +3,8 @@ import { View, Text, TouchableOpacity, StyleSheet, FlatList } from 'react-native
 import { useRoute, useFocusEffect } from '@react-navigation/native';
 import { FontAwesome } from '@expo/vector-icons';
 import axios from 'axios';
+import { AntDesign } from '@expo/vector-icons';
+import  Svg, { Defs, Line, Marker, Path } from 'react-native-svg';
 
 const Updates = () => {
 
@@ -21,7 +23,7 @@ const Updates = () => {
     }
   }
   const [data, setData] = useState([]);
-  const [updatedData, setUpdatedData] =useState([]);
+  const [updatedData, setUpdatedData] = useState([]);
   const route = useRoute();
   const { trip, bus, driver, tripID } = route.params;
 
@@ -41,11 +43,11 @@ const Updates = () => {
   };
 
   const changeStatus = (item) => {
-    // console.log(item)
     if (item.stationStatus === "passed") {
       item.stationStatus = "waiting"
     } else if (item.stationStatus === "waiting") {
       item.stationStatus = "arrived"
+      console.log(item)
     } else {
       item.stationStatus = "passed"
     }
@@ -57,26 +59,17 @@ const Updates = () => {
     })
 
     setUpdatedData(updatedData);
-    // console.log(updatedData[0])
-    // console.log({...updatedData[0]})
-    // console.log(updatedData[0]._id)
-  //  const update= async () => {
-    axios.put(`https://tripoline-backend-m1it.vercel.app/api/stations/${updatedData[0]._id}`, {...updatedData[0]})
-    .then(response => {
-      console.log(response.data);
-    })
-    .catch(error => {
-      console.error(error.response);
-    });
-      // try {
-      //   console.log(updatedData)
-      //   const response1 = await axios.put(`https://tripoline-backend-m1it.vercel.app/api/stations/${updatedData.id}`, updatedData);
-      // } catch (error) {
-      //   console.error(error.response1);
-      // }
-    // };
+
+    axios.put(`https://tripoline-backend-m1it.vercel.app/api/stations/${updatedData[0]._id}`, { ...updatedData[0] })
+      .then(response => {
+        console.log(response.data);
+      })
+      .catch(error => {
+        console.error(error.response);
+      });
+
   }
- 
+
 
 
   const renderItem = ({ item }) => {
@@ -91,7 +84,7 @@ const Updates = () => {
           <View style={{
             backgroundColor:
               getColorByStatus(item.stationStatus),
-              borderWidth:2,
+            borderWidth: 2,
             borderRadius: 50,
             width: 35,
             height: 35,
@@ -110,13 +103,17 @@ const Updates = () => {
     <View style={{ flexDirection: 'column', justifyContent: 'center' }}>
       <View style={{ alignItems: 'center' }}>
         <Text style={{ fontSize: 40, fontWeight: 'bold', color: "#35474C", margin: '3%' }}>{trip}</Text>
+        <AntDesign name="arrowdown" size={30} color="black" />
+        
       </View>
+  
       <FlatList
         data={data}
         renderItem={renderItem}
-        keyExtractor={item => item._id
-        }
+        keyExtractor={item => item._id}
+        contentContainerStyle={{ paddingBottom: 100 }}
       />
+
     </View>
   );
 };
@@ -135,6 +132,14 @@ const styles = StyleSheet.create({
     margin: 10,
     fontSize: 25,
     color: "#115F76"
+  },
+  arrowContainer: {
+    alignItems: 'center',
+  },
+  arrowLine: {
+    backgroundColor: '#000',
+    width: 2,
+    flex: 1,
   },
 
 });

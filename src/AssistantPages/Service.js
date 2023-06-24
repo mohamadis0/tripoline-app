@@ -56,22 +56,19 @@ const Service = ({ navigation }) => {
     }
   };
   const handleStartService = (item) => {
-    const tripItem = data.map(e => {
-      if (selectedTripKey === e.id) {
-        return item;
-      }
-      return e;
-    })
 
-      tripItem[0].tripStatus= "ongoing"
-      console.log({...tripItem})
-      axios.put(`https://tripoline-backend-m1it.vercel.app/api/trips/${selectedTripKey}`, {...tripItem[0]})
-      .then(response => {
-        console.log(response.data);
-      })
-      .catch(error => {
-        console.error(error.response);
-      });
+    const selectedTripItem = data.find(item => item._id === selectedTripKey);
+    if (selectedTripItem) {
+      selectedTripItem.tripStatus = "ongoing";
+      console.log(selectedTripItem)
+      axios.put(`https://tripoline-backend-m1it.vercel.app/api/trips/${selectedTripKey}`, selectedTripItem)
+        .then(response => {
+          console.log(response.data);
+        })
+        .catch(error => {
+          console.error(error.response);
+        });
+    };
 
     navigation.navigate('Updates', {
       tripID: selectedTripKey,
@@ -81,154 +78,150 @@ const Service = ({ navigation }) => {
     });
   };
   const handleStopService = (item) => {
-    const tripItem = data.map(e => {
-      if (selectedTripKey === e.id) {
-        return item;
-      }
-      return e;
-    })
-
-      tripItem[0].tripStatus= "completed"
-      console.log({...tripItem})
-      axios.put(`https://tripoline-backend-m1it.vercel.app/api/trips/${selectedTripKey}`, {...tripItem[0]})
-      .then(response => {
-        console.log(response.data);
-      })
-      .catch(error => {
-        console.error(error.response);
-      });
+   
+    const selectedTripItem = data.find(item => item._id === selectedTripKey);
+    if (selectedTripItem) {
+      selectedTripItem.tripStatus = "completed";
+      console.log(selectedTripItem)
+      axios.put(`https://tripoline-backend-m1it.vercel.app/api/trips/${selectedTripKey}`, selectedTripItem)
+        .then(response => {
+          console.log(response.data);
+        })
+        .catch(error => {
+          console.error(error.response);
+        });
     };
-
-  return (
-    <View >
-      <View style={{ justifyContent: "center" }}>
-        <Text style={styles.title} >Welcome assistant</Text></View>
-      <View style={styles.picker}>
-        <View style={{ position: 'absolute', left: 0 }} >
-          <MaterialCommunityIcons name="road" size={50} color="#115F76" />
-        </View>
-        <SelectPicker style={{ marginLeft: "13%" }}
-          selectedValue={selectedTrip}
-          onValueChange={(itemValue, itemIndex) => {
-            setSelectedTrip(itemValue);
-            setSelectedTripKey(data[itemIndex]._id);
-          }}
-        >
-          {data.map(item => (
-            <SelectPicker.Item key={item._id} label={item.tripName} value={item.tripName} style={styles.pickertext} />
-          ))}
-        </SelectPicker>
-      </View>
-      <View style={styles.picker1}>
-        <View style={{ position: 'absolute', left: 0 }} >
-          <Ionicons name="bus" size={50} color="#115F76" />
-        </View>
-        <View  >
+  }
+    return (
+      <View >
+        <View style={{ justifyContent: "center" }}>
+          <Text style={styles.title} >Welcome assistant</Text></View>
+        <View style={styles.picker}>
+          <View style={{ position: 'absolute', left: 0 }} >
+            <MaterialCommunityIcons name="road" size={50} color="#115F76" />
+          </View>
           <SelectPicker style={{ marginLeft: "13%" }}
-            selectedValue={selectedBus}
-            onValueChange={(itemValue) => setSelectedBus(itemValue)}
+            selectedValue={selectedTrip}
+            onValueChange={(itemValue, itemIndex) => {
+              setSelectedTrip(itemValue);
+              setSelectedTripKey(data[itemIndex]._id);
+            }}
           >
-            {data1.map(item => (
-              <SelectPicker.Item key={item._id} label={item.Busname} value={item.Busname} style={styles.pickertext} />
+            {data.map(item => (
+              <SelectPicker.Item key={item._id} label={item.tripName} value={item.tripName} style={styles.pickertext} />
             ))}
           </SelectPicker>
         </View>
-      </View>
-      <View style={styles.picker2}>
-      <View style={{ position: 'absolute', left: 0 }} >
-      <Ionicons name="person" size={50} color="#115F76" />
+        <View style={styles.picker1}>
+          <View style={{ position: 'absolute', left: 0 }} >
+            <Ionicons name="bus" size={50} color="#115F76" />
+          </View>
+          <View  >
+            <SelectPicker style={{ marginLeft: "13%" }}
+              selectedValue={selectedBus}
+              onValueChange={(itemValue) => setSelectedBus(itemValue)}
+            >
+              {data1.map(item => (
+                <SelectPicker.Item key={item._id} label={item.Busname} value={item.Busname} style={styles.pickertext} />
+              ))}
+            </SelectPicker>
+          </View>
         </View>
-        <SelectPicker style={{ marginLeft: "13%" }}
-          selectedValue={selectedDriver}
-          onValueChange={(itemValue) => setSelectedDriver(itemValue)}
-        >
-          {data2.map(item => (
-            <SelectPicker.Item key={item._id} label={item.DriverName} value={item.DriverName} style={styles.pickertext} />
-          ))}
-        </SelectPicker>
-      </View>
-
-      <View style={{ flexDirection: "row", justifyContent: "center", }}>
-        <View >
-          <TouchableOpacity onPress={handleStartService} style={styles.topacity} >
-            <Text style={styles.opacitytext}>Start Service</Text>
-          </TouchableOpacity>
+        <View style={styles.picker2}>
+          <View style={{ position: 'absolute', left: 0 }} >
+            <Ionicons name="person" size={50} color="#115F76" />
+          </View>
+          <SelectPicker style={{ marginLeft: "13%" }}
+            selectedValue={selectedDriver}
+            onValueChange={(itemValue) => setSelectedDriver(itemValue)}
+          >
+            {data2.map(item => (
+              <SelectPicker.Item key={item._id} label={item.DriverName} value={item.DriverName} style={styles.pickertext} />
+            ))}
+          </SelectPicker>
         </View>
-        <View >
-          <TouchableOpacity style={styles.topacity} onPress={handleStopService}>
-            <Text style={styles.opacitytext}>Stop Service</Text>
-          </TouchableOpacity>
+
+        <View style={{ flexDirection: "row", justifyContent: "center", }}>
+          <View >
+            <TouchableOpacity onPress={handleStartService} style={styles.topacity} >
+              <Text style={styles.opacitytext}>Start Service</Text>
+            </TouchableOpacity>
+          </View>
+          <View >
+            <TouchableOpacity style={styles.topacity} onPress={handleStopService}>
+              <Text style={styles.opacitytext}>Stop Service</Text>
+            </TouchableOpacity>
+          </View>
         </View>
+
       </View>
-
-    </View>
-  )
-}
-
-export default Service
-const styles = StyleSheet.create({
-  title: {
-    margin: '4%',
-    color: "#35474C",
-    fontSize: 40,
-    fontWeight: 'bold',
-  },
-  pickertext: {
-    color: "#115F76",
-    fontSize: 25,
-
-  },
-  picker: {
-    justifyContent: "center",
-    borderWidth: 3,
-    height: '15%',
-    borderColor: "#115F76",
-    borderTopLeftRadius: 30,
-    borderTopRightRadius:30,
-    margin: '4%',
-    marginBottom: 0,
-
-
-  },
-  picker1: {
-    justifyContent: 'center',
-    borderWidth: 3,
-    height: '15%',
-    borderColor: "#115F76",
-    marginLeft: '4%',
-    marginRight: '4%',
-    marginBottom: 0,
-    borderTopWidth: 0,
-    borderBottomWidth: 0,
-  },
-  picker2: {
-    justifyContent: "center",
-    borderWidth: 3,
-    height: '15%',
-    borderColor: "#115F76",
-    borderBottomRightRadius: 30,
-    borderBottomLeftRadius:30,
-    marginLeft: '4%',
-    marginRight: '4%',
-    marginBottom: '4%',
-
-  },
-  topacity: {
-    backgroundColor: "#fde052",
-    padding: '2%',
-    marginTop: "12%",
-    marginLeft: '19%',
-    margin: '8%',
-    height: "25%",
-    width: "65%",
-    borderRadius: 15,
-    justifyContent: "center",
-    alignItems: 'center'
-  },
-  opacitytext: {
-    color: "#115F76",
-    fontWeight: "bold",
-    fontSize: 15,
+    )
   }
 
-})
+  export default Service
+  const styles = StyleSheet.create({
+    title: {
+      margin: '4%',
+      color: "#35474C",
+      fontSize: 40,
+      fontWeight: 'bold',
+    },
+    pickertext: {
+      color: "#115F76",
+      fontSize: 25,
+
+    },
+    picker: {
+      justifyContent: "center",
+      borderWidth: 3,
+      height: '15%',
+      borderColor: "#115F76",
+      borderTopLeftRadius: 30,
+      borderTopRightRadius: 30,
+      margin: '4%',
+      marginBottom: 0,
+
+
+    },
+    picker1: {
+      justifyContent: 'center',
+      borderWidth: 3,
+      height: '15%',
+      borderColor: "#115F76",
+      marginLeft: '4%',
+      marginRight: '4%',
+      marginBottom: 0,
+      borderTopWidth: 0,
+      borderBottomWidth: 0,
+    },
+    picker2: {
+      justifyContent: "center",
+      borderWidth: 3,
+      height: '15%',
+      borderColor: "#115F76",
+      borderBottomRightRadius: 30,
+      borderBottomLeftRadius: 30,
+      marginLeft: '4%',
+      marginRight: '4%',
+      marginBottom: '4%',
+
+    },
+    topacity: {
+      backgroundColor: "#fde052",
+      padding: '2%',
+      marginTop: "12%",
+      marginLeft: '19%',
+      margin: '8%',
+      height: "25%",
+      width: "65%",
+      borderRadius: 15,
+      justifyContent: "center",
+      alignItems: 'center'
+    },
+    opacitytext: {
+      color: "#115F76",
+      fontWeight: "bold",
+      fontSize: 15,
+    }
+
+  })
