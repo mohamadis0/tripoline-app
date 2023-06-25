@@ -17,14 +17,14 @@ const LoginScreen = () => {
 
     try {
 
-      const response = await axios.post('https://tripoline-backend-m1it.vercel.app/api/users/login',
+      const response = await axios.post('http://10.0.2.2:3000/api/users/login',
         {
           "email": username,
           "password": password
         });
        
       const profileId = response.data.data.user.profileId;
-      const response1 = await axios.get(`https://tripoline-backend-m1it.vercel.app/api/profiles/${profileId}`);
+      const response1 = await axios.get(`http://10.0.2.2:3000/api/profiles/${profileId}`);
       console.log(response1)
       dispatch({ type: "LOGIN_SUCCESS", payload: response1.data })
     } catch (error) {

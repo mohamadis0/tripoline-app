@@ -30,7 +30,7 @@ const Service = ({ navigation }) => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch("https://tripoline-backend-m1it.vercel.app/api/trips");
+      const response = await fetch("http://10.0.2.2:3000/api/trips");
       const jsonData = await response.json();
       setData(jsonData);
     } catch (error) {
@@ -39,7 +39,7 @@ const Service = ({ navigation }) => {
   };
   const fetchData1 = async () => {
     try {
-      const response = await fetch("https://tripoline-backend-m1it.vercel.app/api/buses");
+      const response = await fetch("http://10.0.2.2:3000/api/buses");
       const jsonData = await response.json();
       setData1(jsonData);
     } catch (error) {
@@ -48,7 +48,7 @@ const Service = ({ navigation }) => {
   };
   const fetchData2 = async () => {
     try {
-      const response = await fetch("https://tripoline-backend-m1it.vercel.app/api/drivers");
+      const response = await fetch("http://10.0.2.2:3000/api/drivers");
       const jsonData = await response.json();
       setData2(jsonData);
     } catch (error) {
@@ -61,7 +61,7 @@ const Service = ({ navigation }) => {
     if (selectedTripItem) {
       selectedTripItem.tripStatus = "ongoing";
       console.log(selectedTripItem)
-      axios.put(`https://tripoline-backend-m1it.vercel.app/api/trips/${selectedTripKey}`, selectedTripItem)
+      axios.put(`http://10.0.2.2:3000/api/trips/${selectedTripKey}`, selectedTripItem)
         .then(response => {
           console.log(response.data);
         })
@@ -83,7 +83,7 @@ const Service = ({ navigation }) => {
     if (selectedTripItem) {
       selectedTripItem.tripStatus = "completed";
       console.log(selectedTripItem)
-      axios.put(`https://tripoline-backend-m1it.vercel.app/api/trips/${selectedTripKey}`, selectedTripItem)
+      axios.put(`http://10.0.2.2:3000/api/trips/${selectedTripKey}`, selectedTripItem)
         .then(response => {
           console.log(response.data);
         })

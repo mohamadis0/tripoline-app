@@ -4,8 +4,8 @@ import { useState, useEffect, } from 'react';
 import { useRoute } from '@react-navigation/core';
 import { FontAwesome } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
-import axios from 'axios';
-import Svg, { Polygon, Rect, Path, SvgUri } from 'react-native-svg';
+import RNEventSource from 'react-native-event-source';
+
 
 
 
@@ -14,14 +14,50 @@ const Table = () => {
   const [data, setData] = useState([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
-  useEffect(() => { 
-    console.log("...")
-    // fetchData();
-  }, [data]);
+  useEffect(() => {
+    const eventSource = new RNEventSource('http://10.0.2.2:3000/api/stationUpdates', {
+      headers: {
+        Accept: 'text/event-stream',
+      },
+      withCredentials: false,
+
+    });
+    console.log(eventSource)
+    eventSource.addEventListener('message', (event) => {
+      const eventData = JSON.parse(event.data);
+      // const updatedData = data.map(e => {
+      //   if (e._id === eventData._id) {
+      //    return eventData
+         
+      //   }
+      //   return e;
+      // })
+      // console.log(updatedData)
+      // setData(updatedData)
+      fetchData(); 
+      console.log('Received event:', eventData);
+    });
+    eventSource.addEventListener('open', (event) => {
+      console.log('sse opened');
+    });
+
+    eventSource.addEventListener('error', (error) => {
+      console.error('EventSource error:', error);
+    });
+
+    return () => {
+      eventSource.close();
+    };
+  }, []);
+
+  // useEffect(() => {
+  //   console.log("...")
+  //   fetchData();
+  // }, [data]);
 
   const handleRefresh = () => {
     setIsRefreshing(true);
-  
+
     console.log("Refresh");
     setTimeout(() => {
       setIsRefreshing(false);
@@ -50,10 +86,9 @@ const Table = () => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch(`https://tripoline-backend-m1it.vercel.app/api/stations/trip/${tripId}`);
+      const response = await fetch(`http://10.0.2.2:3000/api/stations/trip/${tripId}`);
       const jsonData = await response.json();
       setData(jsonData);
-      // setIsRefreshing(false);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -65,15 +100,13 @@ const Table = () => {
       time = `${minutes} min`;
     }
 
-
-    const backgroundColor = getColorByStatus(item.stationStatus);
     return (
       <View stlyle={{ flexDirection: 'row' }}>
         <View style={styles.viewLine}>
           <FontAwesome name="hand-stop-o" size={30} color="#34555F" style={{ margin: '3%' }} />
           <Text style={{ margin: '3%', fontSize: 25, color: "#34555F" }}>{item.stationName}</Text>
           <View style={{
-            backgroundColor: backgroundColor,
+            backgroundColor: getColorByStatus(item.stationStatus),
             borderRadius: 50,
             borderColor: "#1F3339",
             width: "9%",
@@ -95,14 +128,9 @@ const Table = () => {
     <View style={{ flex: 1, }} >
       <View style={{ alignItems: "center", }}>
         <Text style={styles.title} >Stations</Text>
-        <View>
-
-        </View>
         <AntDesign name="arrowdown" size={30} color="black" />
       </View>
       <View style={{ flexDirection: "row", flex: 1 }}>
-        <View style={{ alignItems: 'center', width: 10, height: "80%", margin: '2%' }}>
-        </View>
         <FlatList
           data={data}
           renderItem={renderItem}

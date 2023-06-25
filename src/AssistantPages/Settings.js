@@ -5,25 +5,17 @@ import { Button, Text, View } from 'react-native';
 
 const Settings = () => {
 
-   const navigation = useNavigation();
-  const handleRightButtonPress = () => {
-      navigation.navigate('details')
-  };
 
-  return (
-   
-    <View>
+   return (
 
-       <View
-      
-      >
-     
 
-      <Text>Settings</Text>
-      </View> 
-     </View>
 
-  )
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+         <Text style={{ textAlign: 'center', fontSize: 40, color: 'grey' }}>Coming Soon</Text>
+      </View>
+
+
+   )
 }
 
 export default Settings

@@ -33,10 +33,10 @@ const Updates = () => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch(`https://tripoline-backend-m1it.vercel.app/api/stations/trip/${tripID}`);
+      const response = await fetch(`http://10.0.2.2:3000/api/stations/trip/${tripID}`);
       const jsonData = await response.json();
       setData(jsonData);
-      // console.log(data)
+      
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -47,6 +47,7 @@ const Updates = () => {
       item.stationStatus = "waiting"
     } else if (item.stationStatus === "waiting") {
       item.stationStatus = "arrived"
+      item.stationTime = " -- min"
       console.log(item)
     } else {
       item.stationStatus = "passed"
@@ -60,7 +61,7 @@ const Updates = () => {
 
     setUpdatedData(updatedData);
 
-    axios.put(`https://tripoline-backend-m1it.vercel.app/api/stations/${updatedData[0]._id}`, { ...updatedData[0] })
+    axios.put(`http://10.0.2.2:3000/api/stations/${updatedData[0]._id}`, { ...updatedData[0] })
       .then(response => {
         console.log(response.data);
       })

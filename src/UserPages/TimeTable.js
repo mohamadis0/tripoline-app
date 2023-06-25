@@ -11,7 +11,7 @@ LogBox.ignoreAllLogs();
 const TimeTable = (props) => {
   const navigation = useNavigation()
   useEffect(() => {
-    const eventSource = new RNEventSource('http://192.168.1.39:3000/api/updates', {
+    const eventSource = new RNEventSource('http://10.0.2.2:3000/api/updates', {
       headers:{
         Accept: 'text/event-stream',
       },
@@ -21,14 +21,15 @@ const TimeTable = (props) => {
     console.log(eventSource)
     eventSource.addEventListener('message', (event) => {
       const eventData = JSON.parse(event.data);
-      const updatedData = data.map(e => {
-        if (e._id === eventData._id) {
-          return eventData
-        }
-        return e;
-      })
+      // const updatedData = data.map(e => {
+      //   if (e._id === eventData._id) {
+      //     return eventData
+      //   }
+      //   return e;
+      // })
 
-      setData(updatedData)
+      // setData(updatedData)
+      fetchData(); 
       console.log('Received event:', eventData);
     });
     eventSource.addEventListener('open', (event) => {
@@ -40,9 +41,17 @@ const TimeTable = (props) => {
     });
 
     return () => {
-      eventSource.close(); // Close the EventSource connection when component unmounts
+      eventSource.close(); 
     };
   }, []);
+
+
+  const [data, setData] = useState([]);
+
+  //   useEffect(() => {
+  //   console.log("...")
+  //   fetchData();
+  // }, [data]);
 
   const [isRefreshing, setIsRefreshing] = useState(false);
 
@@ -58,8 +67,6 @@ const TimeTable = (props) => {
   
     navigation.navigate('Table', { tripId: item._id });
   }
-
-  const [data, setData] = useState([]);
   
   
   useEffect(() => {
@@ -69,7 +76,7 @@ const TimeTable = (props) => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch("https://tripoline-backend-m1it.vercel.app/api/trips");
+      const response = await fetch("http://10.0.2.2:3000/api/trips");
       const jsonData = await response.json();
       setData(jsonData);
     
@@ -90,8 +97,18 @@ const TimeTable = (props) => {
     }
   }
   const renderItem = ({ item }) => {
+    function getTime(date) {
+      var currentDateTime = new Date(date);
+      var options = { hour: 'numeric', minute: 'numeric', hour12: true };
+      var currentTime = currentDateTime.toLocaleTimeString([], options);
+      return currentTime;
+    }
    
     return (
+      <View>
+      <View style={{ padding:5, alignItems:'center'}}>
+        <Text style={{ fontSize:17,color:"#34555F"}}>{getTime(item.departureTime)}</Text>
+      </View>
       <TouchableOpacity onPress={
         () => handlePress(item)
       }
@@ -112,7 +129,7 @@ const TimeTable = (props) => {
         </View>
       </View>
       </TouchableOpacity>
-
+      </View>
     );
   };
 

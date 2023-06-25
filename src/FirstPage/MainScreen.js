@@ -6,5 +6,5 @@ import LoginScreen from '../../src/FirstPage/LoginScreen';
 
 export function MainScreen() {
     const user = useSelector(state => state.auth.user)
-    return (!user ? <LoginScreen /> : user.profileName === "admin" ? <Assistant /> : <User />)
+    return (!user ? <LoginScreen /> : user.profileName === "busManager" ? <Assistant /> : <User />)
 }

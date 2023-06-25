@@ -3,8 +3,9 @@ import React from 'react'
 
 const Feedback = () => {
   return (
-    <View>
-      <Text>Feedback</Text>
+
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text style={{ textAlign: 'center', fontSize: 40, color: 'grey' }}>Coming Soon</Text>
     </View>
   )
 }
